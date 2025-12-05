@@ -5,6 +5,84 @@ description: Learn about Terraform Cloud - CLI-Driven Workflow
 
 ## Step-01: Introduction
 - Learn and practically implement `CLI-Driven Workflow` in Terraform Cloud
+- Terraform Cloud’s CLI-driven workflow lets developers continue using the same Terraform CLI commands they are used to (terraform plan, terraform apply, terraform destroy), but the actual execution happens in Terraform Cloud, not on the local machine.
+
+This gives you:
+✔ Remote execution
+✔ Remote state management
+✔ Centralized logs & histories
+✔ Access to workspace variables
+✔ Access to private module registry
+✔ Sentinel policy enforcement
+✔ Remote state data source sharing (cross-workspace)
+
+**What is CLI-Driven Workflow in Terraform Cloud?**
+When you use Terraform locally with a backend like this:
+```t
+terraform {
+  cloud {
+    organization = "HCTADemoAzure1"
+
+    workspaces {
+      name = "your-workspace-name"
+    }
+  }
+}
+```
+
+Then:
+You run terraform plan → but Terraform Cloud executes the run
+You run terraform apply → Terraform Cloud performs the apply
+The logs, timelines, & state file are managed in Terraform Cloud
+So the CLI is simply triggering the run, but the work is done remotely.
+
+**What Features Does CLI-Driven Workflow Provide?**
+**✔ 1. Remote Execution** - No local execution. Terraform does everything inside the remote workspace.
+**✔ 2. Remote State Management** - State is always stored and versioned in Terraform Cloud.
+**✔ 3. Uses Workspace Variables** - Any variables you configured in Terraform Cloud (env vars, Terraform vars) are used automatically.
+**✔ 4. Private Module Registry Access** You can directly reference modules from:
+```t app.terraform.io/<org>/<module>/<provider> ```
+Terraform Cloud validates your credentials via terraform login.
+**✔ 5. Sentinel Policies (If enabled)** - All CLI-initiated runs go through policy checks.
+**✔ 6. Remote State Inputs (Cross-workspace data source)** - 
+You can fetch outputs from another workspace:
+```t
+data "terraform_remote_state" "vpc" {
+  backend = "remote"
+  config = {
+    organization = "HCTADemoAzure1"
+    workspaces = {
+      name = "vpc-workspace"
+    }
+  }
+}
+```
+Perfect for multi-team and multi-module deployments.
+
+**How CLI Runs Are Shown in Terraform Cloud?**
+Every CLI-triggered apply/destroy is tracked in the Runs tab of the workspace.
+
+You will see entries like:
+✔ Plan
+✔ Cost estimation (if enabled)
+✔ Apply
+✔ Destroy
+✔ State version changes
+
+The state versions increment:
+Action	   State Version
+Apply	     Version n+1
+Destroy	   Version n+2
+
+Plan-only runs are not stored as permanent state versions, but the plan logs are viewable temporarily via the URL Terraform gives you.
+
+**Why Developers Use CLI-Driven Workflow**
+Developers prefer this workflow because they get:
+The same CLI experience (local development feel)
+Full visibility in the terminal
+No need to commit code before testing Terraform Cloud execution
+Complete parity with actual production workflow (VCS workflow)
+This is the recommended approach before moving to pipeline-based deployments.
 
 ## Step-02: Review Terraform Configuration Files
 - c1-versions.tf
