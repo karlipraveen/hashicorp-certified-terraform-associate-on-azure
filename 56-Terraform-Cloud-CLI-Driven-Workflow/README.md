@@ -5,7 +5,13 @@ description: Learn about Terraform Cloud - CLI-Driven Workflow
 
 ## Step-01: Introduction
 - Learn and practically implement `CLI-Driven Workflow` in Terraform Cloud
-- Terraform Cloud’s CLI-driven workflow lets developers continue using the same Terraform CLI commands they are used to (terraform plan, terraform apply, terraform destroy), but the actual execution happens in Terraform Cloud, not on the local machine.
+- Terraform Cloud’s CLI-driven workflow using the same Terraform CLI commands (terraform plan, terraform apply, terraform destroy) to execute runs in Terraform Cloud, not on the local machine. You can verify progress in the CLI terminal or the URL provided whatever during that time or you can directly go to Terraform Cloud and then veiw the same thing under Runs tab.
+
+In Terraform Cloud as Backend configured in Terraform Block.
+
+In **Runs** Tab, you see the "**Currnent Run**". If you click anyone of the run you can see **Plan**, **Cost estimation** and **Apply**. The entire workflow is tracked and logs inside that also available for you, even using CLI driven workflow tracked via Terraform Cloud.
+
+In **States** Tab, the "terraform apply" or "terraform destory" generated the separate state file and shows its version.
 
 This gives you:
 ✔ Remote execution
@@ -15,26 +21,6 @@ This gives you:
 ✔ Access to private module registry
 ✔ Sentinel policy enforcement
 ✔ Remote state data source sharing (cross-workspace)
-
-**What is CLI-Driven Workflow in Terraform Cloud?**
-When you use Terraform locally with a backend like this:
-```t
-terraform {
-  cloud {
-    organization = "HCTADemoAzure1"
-
-    workspaces {
-      name = "your-workspace-name"
-    }
-  }
-}
-```
-
-Then:
-You run terraform plan → but Terraform Cloud executes the run
-You run terraform apply → Terraform Cloud performs the apply
-The logs, timelines, & state file are managed in Terraform Cloud
-So the CLI is simply triggering the run, but the work is done remotely.
 
 **What Features Does CLI-Driven Workflow Provide?**
 **✔ 1. Remote Execution** - No local execution. Terraform does everything inside the remote workspace.
